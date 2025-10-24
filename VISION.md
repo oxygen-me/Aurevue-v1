@@ -1,7 +1,7 @@
-# 💡 MicroBoard Vision Document
+# 💡 Aurevue Vision Document
 
 This document defines the guiding vision, principles, and long-term
-direction of the **MicroBoard** project. It establishes the strategic
+direction of the **Aurevue** project. It establishes the strategic
 intent behind every technical and design decision.
 
 ------------------------------------------------------------------------
@@ -77,7 +77,7 @@ clarity, aesthetics, and control back to the user experience on Windows
 
 ## Long-Term Positioning
 
-MicroBoard aims to occupy a unique space between system enhancement and
+Aurevue aims to occupy a unique space between system enhancement and
 creative tool --- a *personal control center* that merges design,
 productivity, and adaptability.
 
@@ -91,4 +91,4 @@ around.
 
 ------------------------------------------------------------------------
 
-© 2025 Bradley Jensen. All rights reserved.
+© 2025 Oxygen-Me. All rights reserved.
