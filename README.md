@@ -1,4 +1,4 @@
-# 💠 MicroBoard
+# 💠 Aurevue
 
 ### *"Your desktop, unified. Your space, simplified."*
 
@@ -6,7 +6,7 @@
 
 ## 🌌 What Even *Is* This?
 
-MicroBoard is what happens when a joke OS grows up and gets serious.
+Aurevue is what happens when a joke OS grows up and gets serious.
 Born from the chaos of *ThingyOS* and the heart of *SephirothOS*, it's
 now evolved into something real --- an all-in-one minimalist interface
 for Windows.
@@ -19,11 +19,11 @@ single, living UI that actually feels *yours*.
 
 ## 🧱 The Core Idea
 
-It's simple: **Windows, but pretty.** MicroBoard replaces the noise with
+It's simple: **Windows, but pretty.** Aurevue replaces the noise with
 an elegant dashboard you actually want to use. Each tile is alive ---
 you can move it, resize it, restyle it, and make it yours.
 
-The vibe? \> "If SephirothOS was the experiment, MicroBoard is the
+The vibe? \> "If SephirothOS was the experiment, Aurevue is the
 upgrade."
 
 ------------------------------------------------------------------------
@@ -53,7 +53,7 @@ upgrade."
 -   **Team:** \$15--25/user/yr --- shared setups and deployment tools.
 -   **Lifetime license:** \$59 for early supporters (limited).
 
-No ads. No telemetry. No data-selling nonsense.
+No forced ads. No telemetry. No data-selling nonsense.
 
 ------------------------------------------------------------------------
 
@@ -83,19 +83,19 @@ between the fake email system, the music player, and the broken
 installer, I realized this wasn't just comedy anymore. I'd accidentally
 taught myself how to build something real.
 
-Now, **MicroBoard** is that realization turned into intention --- the
+Now, **Aurevue** is that realization turned into intention --- the
 polished form of every mistake, experiment, and late-night idea that
 came before it. It's not perfect, and it doesn't need to be. It just
 needs to *feel alive.*
 
-> From chaos to clarity --- this is MicroBoard.
+> From chaos to clarity --- this is Aurevue.
 
 ------------------------------------------------------------------------
 
 ## 👑 Credits
 
-Built by **Bradley Jensen**, the same chaotic mind behind *SephirothOS*.
+Built by **Oxygen-Me**, the same chaotic mind behind *SephirothOS*.
 Special thanks to the early testers, believers, and people who said "you
 won't actually finish that."
 
-> You were wrong. 😏
+> You were wrong.
