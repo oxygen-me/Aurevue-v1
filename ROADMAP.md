@@ -1,6 +1,6 @@
-# 🛣️ MicroBoard Development Roadmap
+# 🛣️ Aurevue Development Roadmap
 
-This document outlines the planned evolution of **MicroBoard** from its
+This document outlines the planned evolution of **Aurevue** from its
 initial release through long-term feature expansions. It serves as a
 transparent overview of priorities, milestones, and design direction.
 
@@ -9,7 +9,7 @@ transparent overview of priorities, milestones, and design direction.
 ## Phase 1 --- Foundation (0--6 Months)
 
 **Objective:** Establish a stable and visually distinct foundation for
-MicroBoard.
+Aurevue.
 
 **Key Deliverables:** - Window-based modular interface with tile layout
 system - Core applications: Browser, Music, System Monitor, Notes -
@@ -25,7 +25,7 @@ documentation and release candidate build
 
 ## Phase 2 --- Expansion (6--12 Months)
 
-**Objective:** Extend MicroBoard into a fully interactive and extensible
+**Objective:** Extend Aurevue into a fully interactive and extensible
 platform.
 
 **Key Deliverables:** - Fullscreen / Dashboard mode - Plugin and tile
@@ -41,7 +41,7 @@ plugin-heavy workloads
 
 ## Phase 3 --- Personalization (1--2 Years)
 
-**Objective:** Empower users to customize MicroBoard's appearance and
+**Objective:** Empower users to customize Aurevue's appearance and
 behavior.
 
 **Key Deliverables:** - Theme Builder (background, color, and tile
@@ -75,7 +75,7 @@ Aether Mode operational on supported hardware
 
 ## Phase 5 --- Beyond (3--6 Years)
 
-**Objective:** Expand MicroBoard beyond Windows and establish its
+**Objective:** Expand Aurevue beyond Windows and establish its
 long-term ecosystem.
 
 **Key Deliverables:** - Cross-platform compatibility (macOS/Linux shell
@@ -92,10 +92,10 @@ branch established
 
 ## Future Outlook
 
-MicroBoard's vision extends beyond a single interface. The ultimate goal
+Aurevue's vision extends beyond a single interface. The ultimate goal
 is to create an adaptive, modular environment that evolves with the
 user. By focusing on openness, extensibility, and performance,
-MicroBoard will transition from a utility into a personalized computing
+Aurevue will transition from a utility into a personalized computing
 ecosystem.
 
 **Guiding Principles:** - User-first design and transparent data
@@ -105,4 +105,4 @@ subscriptions
 
 ------------------------------------------------------------------------
 
-© 2025 Bradley Jensen. All rights reserved.
+© 2025 Oxygen-Me. All rights reserved.
