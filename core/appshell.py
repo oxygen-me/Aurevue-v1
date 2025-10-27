@@ -1,8 +1,8 @@
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QGraphicsDropShadowEffect
 from PySide6.QtCore import Qt
-from ui.topbar.topbar import TopBar
-from ui.sidebar.sidebar import SideBar
+from ui.tileboard.tileboard import BoardWidget
+from ui.tileboard.tile import TileWidget
 
 class AppShell(QWidget):
     def __init__(self):
@@ -13,7 +13,7 @@ class AppShell(QWidget):
         # -------------------------
 
         self.setWindowTitle("Aurevue")
-        self.resize(1220, 920)
+        self.resize(1260, 960)
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         window_layout = QVBoxLayout()
@@ -31,30 +31,26 @@ class AppShell(QWidget):
         # CONTENT AREA CREATION
         # -------------------------
 
-        self.inner = QWidget(self.outer)
-        self.inner.setStyleSheet("background-color: #d1d5d8; border-radius: 12px")
-        inner_layout = QGridLayout()
-        inner_layout.setContentsMargins(20, 20, 20, 20)
-        inner_layout.setSpacing(20)
+        self.board = BoardWidget()  # lives inside the layout, not manually positioned
+        self.board.setObjectName("board_area")
+        self.board.setStyleSheet("""
+            #board_area {
+                background-color: #d0d3d5;
+                border-radius: 12px;
+            }
+        """)
+
+        self.board.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
         # -------------------------
         # TOPBAR AND SIDEBAR
         # -------------------------
 
-        self.topbar = TopBar(self.inner)
-        self.topbar.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
-        inner_layout.addWidget(self.topbar, 0, 0, alignment=Qt.AlignmentFlag.AlignTop)
-
-        self.sidebar = SideBar(self.inner)
-        self.sidebar.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
-        inner_layout.addWidget(self.sidebar, 1, 0)
-
         # -------------------------
         # LAYOUTS GALORE
         # -------------------------
-        outer_layout.addWidget(self.inner)
+        outer_layout.addWidget(self.board, 1, alignment=Qt.AlignmentFlag.AlignCenter)
         window_layout.addWidget(self.outer)
 
-        self.inner.setLayout(inner_layout)
         self.outer.setLayout(outer_layout)
         self.setLayout(window_layout)
