@@ -1,8 +1,6 @@
-from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QGraphicsDropShadowEffect
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QApplication, QLayout
 from PySide6.QtCore import Qt
 from ui.tileboard.tileboard import BoardWidget
-from ui.tileboard.tile import TileWidget
 
 class AppShell(QWidget):
     def __init__(self):
@@ -18,6 +16,8 @@ class AppShell(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         window_layout = QVBoxLayout()
 
+        self.center_on_screen()
+
         # -------------------------
         # OUTER SHELL CREATION
         # -------------------------
@@ -32,15 +32,7 @@ class AppShell(QWidget):
         # -------------------------
 
         self.board = BoardWidget()  # lives inside the layout, not manually positioned
-        self.board.setObjectName("board_area")
-        self.board.setStyleSheet("""
-            #board_area {
-                background-color: #d0d3d5;
-                border-radius: 12px;
-            }
-        """)
 
-        self.board.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
         # -------------------------
         # TOPBAR AND SIDEBAR
@@ -49,8 +41,17 @@ class AppShell(QWidget):
         # -------------------------
         # LAYOUTS GALORE
         # -------------------------
-        outer_layout.addWidget(self.board, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        outer_layout.addWidget(self.board, 1)
         window_layout.addWidget(self.outer)
 
         self.outer.setLayout(outer_layout)
         self.setLayout(window_layout)
+
+    def center_on_screen(self):
+        screen = QApplication.primaryScreen()
+        screen_geometry = screen.availableGeometry()
+        window_geometry = self.frameGeometry()
+
+        screen_center = screen_geometry.center()
+        window_geometry.moveCenter(screen_center)
+        self.move(window_geometry.topLeft())

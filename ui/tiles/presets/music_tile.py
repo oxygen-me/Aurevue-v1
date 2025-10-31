@@ -2,7 +2,8 @@ from PySide6.QtCore import Qt, Signal, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QPixmap, QFont
 from PySide6.QtWidgets import QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QSpacerItem, QSizePolicy
 
-from ui.tileboard.tile import TileWidget  # your base TileWidget
+from ui.tileboard.tile import TileWidget
+
 
 class MusicTile(TileWidget):
     """Aurevue Music Tile (visual shell). No external APIs yet.
@@ -10,18 +11,16 @@ class MusicTile(TileWidget):
        Emits play/pause/next/prev signals for integration later.
     """
 
-    # Signals you can connect to Spotify/AureAux later
     sig_play_pause = Signal()
     sig_next = Signal()
     sig_prev = Signal()
 
-    def __init__(self, parent=None):
-        super().__init__(parent, tile_id="music", tile_type="music")
+    def __init__(self, parent=None, **kwargs):
+        super().__init__(parent, tile_id="music", tile_type="music", **kwargs)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
-        # --- Layout from base TileWidget ---
-        root = self.layout()
-        root.setContentsMargins(16, 16, 16, 16)
+        # ---------- layout fix ----------
+        root = self.inner_layout
         root.setSpacing(10)
         root.setAlignment(Qt.AlignmentFlag.AlignTop)
 
@@ -29,7 +28,6 @@ class MusicTile(TileWidget):
         self.setStyleSheet("""
             MusicTile {
                 background-color: #ffffff;
-                border: 1px solid #E3E3E3;
                 border-radius: 12px;
             }
             QLabel {
@@ -52,13 +50,11 @@ class MusicTile(TileWidget):
         top = QHBoxLayout()
         top.setSpacing(12)
 
-        # Album Art
         self.cover = QLabel()
-        self.cover.setFixedSize(88, 88)  # fits nicely in a 2x2 cell tile
+        self.cover.setFixedSize(88, 88)
         self.cover.setScaledContents(True)
         self.cover.setPixmap(self._placeholder_pixmap(88, 88))
 
-        # Title/Artist block
         meta_col = QVBoxLayout()
         meta_col.setSpacing(4)
 
@@ -74,7 +70,9 @@ class MusicTile(TileWidget):
 
         meta_col.addWidget(self.title)
         meta_col.addWidget(self.artist)
-        meta_col.addSpacerItem(QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
+        meta_col.addSpacerItem(
+            QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        )
 
         top.addWidget(self.cover)
         top.addLayout(meta_col)
@@ -88,7 +86,6 @@ class MusicTile(TileWidget):
         self.btn_play = QPushButton("Play")
         self.btn_next = QPushButton("Next")
 
-        # Hook signals for later integration
         self.btn_prev.clicked.connect(self.sig_prev.emit)
         self.btn_play.clicked.connect(self.sig_play_pause.emit)
         self.btn_next.clicked.connect(self.sig_next.emit)
@@ -99,33 +96,27 @@ class MusicTile(TileWidget):
         controls.addStretch(1)
 
         # --- Progress (placeholder) ---
-        self.progress = QLabel("")  # can be replaced by a proper bar later
+        self.progress = QLabel("00:00 — 00:00")
         self.progress.setStyleSheet("color:#7a7a7a; font-size:11px;")
-        self.progress.setText("00:00 — 00:00")
 
         # --- Assemble ---
         root.addLayout(top)
         root.addLayout(controls)
         root.addWidget(self.progress)
 
-        # --- Album art fade animation (for future track changes) ---
+        # --- Album art fade animation ---
         self._cover_fade = QPropertyAnimation(self.cover, b"windowOpacity", self)
         self._cover_fade.setDuration(200)
         self._cover_fade.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-    # ---------- Public API (no external deps) ----------
-
+    # ---------- Public API ----------
     def set_track(self, title: str, artist: str):
-        """Update text labels."""
         self.title.setText(title or "Unknown Track")
         self.artist.setText(artist or "Unknown Artist")
 
     def set_cover(self, pixmap: QPixmap | None):
-        """Fade to a new album cover (pixmap)."""
         if pixmap is None or pixmap.isNull():
             pixmap = self._placeholder_pixmap(88, 88)
-
-        # simple fade
         self._cover_fade.stop()
         self.cover.setWindowOpacity(0.0)
         self.cover.setPixmap(pixmap)
@@ -134,17 +125,13 @@ class MusicTile(TileWidget):
         self._cover_fade.start()
 
     def set_playing(self, playing: bool):
-        """Toggle play/pause button label to reflect state."""
         self.btn_play.setText("Pause" if playing else "Play")
 
     def set_progress_text(self, text: str):
-        """Set simple time text until we wire a real progress bar."""
         self.progress.setText(text)
 
     # ---------- Helpers ----------
-
     def _placeholder_pixmap(self, w: int, h: int) -> QPixmap:
         pm = QPixmap(w, h)
         pm.fill(Qt.lightGray)
         return pm
-

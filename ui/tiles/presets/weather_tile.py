@@ -4,12 +4,12 @@ from PySide6.QtCore import Qt
 
 
 class WeatherTile(TileWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent, tile_id="weather", tile_type="weather")
+    def __init__(self, parent=None, **kwargs):
+        super().__init__(parent, tile_id="weather", tile_type="weather", **kwargs)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
         # ----- Layout -----
-        layout = self.layout()
+        layout = self.inner_layout
         layout.setSpacing(8)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
@@ -18,7 +18,6 @@ class WeatherTile(TileWidget):
             WeatherTile {
                 background-color: #ffffff;
                 border-radius: 12px;
-                border: 1px solid #E3E3E3;
             }
             QLabel {
                 background: transparent;
@@ -41,5 +40,3 @@ class WeatherTile(TileWidget):
         layout.addWidget(self.temp)
         layout.addWidget(self.loc)
         layout.addStretch(1)
-
-        self.setLayout(layout)

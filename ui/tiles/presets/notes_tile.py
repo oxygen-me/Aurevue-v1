@@ -5,23 +5,21 @@ import markdown2
 
 
 class NotesTile(TileWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent, tile_id="notes", tile_type="notes")
+    def __init__(self, parent=None, **kwargs):
+        super().__init__(parent, tile_id="notes", tile_type="notes", **kwargs)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
         # ----- Layout -----
-        layout = self.layout()
-        layout.setContentsMargins(16, 16, 16, 16)
+        layout = self.inner_layout
         layout.setSpacing(8)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
         # ----- Styles -----
+        self.inner.setStyleSheet("""
+            background-color: #ffffff;
+            border-radius: 12px;
+        """)
         self.setStyleSheet("""
-            NotesTile {
-                background-color: #ffffff;
-                border-radius: 12px;
-                border: 1px solid #E3E3E3;
-            }
             QLabel {
                 background: transparent;
                 border: none;
@@ -78,12 +76,10 @@ class NotesTile(TileWidget):
     # ----- Toggle between Edit and Preview -----
     def toggle_preview(self):
         if self.previewing:
-            # Switch back to edit mode
             self.preview.hide()
             self.editor.show()
             self.toggle_btn.setText("Preview")
         else:
-            # Render Markdown
             md_text = self.editor.toPlainText()
             html = markdown2.markdown(md_text)
             self.preview.setText(html)
