@@ -1,5 +1,5 @@
 from ui.tileboard.tile import TileWidget  # adjust path as needed
-from PySide6.QtWidgets import QLabel, QVBoxLayout
+from PySide6.QtWidgets import QLabel, QVBoxLayout, QWidget
 from PySide6.QtCore import Qt
 
 
@@ -11,7 +11,7 @@ class SideBar(TileWidget):
         # ----- Layout -----
         layout = self.inner_layout
         layout.setSpacing(8)
-        layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
 
         # ----- Style -----
         self.setStyleSheet("""
@@ -19,8 +19,16 @@ class SideBar(TileWidget):
                 background-color: #ffffff;
                 border-radius: 12px;
             }
+            QLabel {
+                background: transparent;
+                border: none;
+                color: #202020;
+            }
         """)
 
         # ----- Content -----
+        title = QLabel("AureBar")
+        title.setStyleSheet("font-family: Segoe UI; font-size: 24px; font-weight: light;")
+        layout.addWidget(title)
 
         layout.addStretch(1)

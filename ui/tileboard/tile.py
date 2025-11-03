@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QGraphicsDropShadowEffect
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
-
+from core.motion.presets.hover import HoverBehavior
 
 class TileWidget(QWidget):
     """Aurevue Tile Foundry — Faux-Gutter System.
@@ -66,6 +66,7 @@ class TileWidget(QWidget):
         # Shadow (depth)
         # -----------------------------
         self.apply_shadow("#000000", blur=24, x_offset=0, y_offset=6, opacity=0.25)
+        self.hover_fx = HoverBehavior(self.inner)
 
     # -----------------------------
     # Theme / Mood Integration
@@ -98,11 +99,15 @@ class TileWidget(QWidget):
     # -----------------------------
     # Event Hooks (Phase 2)
     # -----------------------------
-    def enterEvent(self, event):  # hover placeholder
-        event.accept()
+    def enterEvent(self, event):
+        if hasattr(self, "hover_fx"):
+            self.hover_fx.enter()
+        super().enterEvent(event)
 
     def leaveEvent(self, event):
-        event.accept()
+        if hasattr(self, "hover_fx"):
+            self.hover_fx.leave()
+        super().leaveEvent(event)
 
     def mousePressEvent(self, event):
         event.accept()

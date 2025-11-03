@@ -2,6 +2,10 @@ from ui.sidebar.sidebar import SideBar
 from ui.tiles.presets.weather_tile import WeatherTile
 from ui.tiles.presets.notes_tile import NotesTile
 from ui.tiles.presets.music_tile import MusicTile
+from ui.tiles.presets.clock_tile import ClockTile
+from ui.tiles.presets.command_tile import CommandTile
+from ui.tiles.presets.glance_tile import GlanceTile
+from ui.tiles.presets.launch_tile import LaunchTile
 from ui.topbar.topbar import TopBar
 
 
@@ -43,13 +47,21 @@ class TileManager:
         topbar = TopBar(self.board, metrics=self.metrics, grid_x=0, grid_y=0, grid_w=14, grid_h=1)
         sidebar = SideBar(self.board, metrics=self.metrics, grid_x=0, grid_y=1, grid_w=3, grid_h=8)
 
-        note = NotesTile(self.board, metrics=self.metrics, grid_x=3, grid_y=1, grid_w=3, grid_h=2)
-        weather = WeatherTile(self.board, metrics=self.metrics, grid_x=6, grid_y=1, grid_w=3, grid_h=2)
-        music = MusicTile(self.board, metrics=self.metrics, grid_x=9, grid_y=1, grid_w=5, grid_h=2)
+        notes = NotesTile(self.board, metrics=self.metrics, grid_x=7, grid_y=3, grid_w=3, grid_h=4)
+        weather = WeatherTile(self.board, metrics=self.metrics, grid_x=6, grid_y=1, grid_w=4, grid_h=2)
+        music = MusicTile(self.board, metrics=self.metrics, grid_x=10, grid_y=5, grid_w=4, grid_h=2)
+        clock = ClockTile(self.board, metrics=self.metrics, grid_x=3, grid_y=1, grid_w=3, grid_h=2)
+        glance = GlanceTile(self.board, metrics=self.metrics, grid_x=3, grid_y=3, grid_w=4, grid_h=4)
+        command = CommandTile(self.board, metrics=self.metrics, grid_x=3, grid_y=7, grid_w=11, grid_h=2)
+        launch = LaunchTile(self.board, metrics=self.metrics, grid_x=10, grid_y=1, grid_w=4, grid_h=4)
 
         self.add_tile(topbar)
         self.add_tile(sidebar)
 
-        self.add_tile(note)
+        self.add_tile(notes)
         self.add_tile(weather)
         self.add_tile(music)
+        self.add_tile(clock)
+        self.add_tile(glance)
+        self.add_tile(command)
+        self.add_tile(launch)
