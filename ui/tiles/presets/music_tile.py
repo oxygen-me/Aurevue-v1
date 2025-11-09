@@ -1,16 +1,7 @@
 from PySide6.QtCore import Qt, Signal, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QPixmap, QFont
 from PySide6.QtWidgets import QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QSpacerItem, QSizePolicy
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
 from ui.tileboard.tile import TileWidget
-
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
-client_id = "YOUR_CLIENT_ID",
-client_secret = "YOUR_CLIENT_SECRET",
-redirect_uri = "http://localhost:8888/callback",
-scope = "user-read-currently-playing"
-))
 
 
 class MusicTile(TileWidget):
