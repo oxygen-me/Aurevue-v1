@@ -14,41 +14,6 @@ class NotesTile(TileWidget):
         layout.setSpacing(8)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
-        # ----- Styles -----
-        self.inner.setStyleSheet("""
-            background-color: #ffffff;
-            border-radius: 12px;
-        """)
-        self.setStyleSheet("""
-            QLabel {
-                background: transparent;
-                border: none;
-                color: #202020;
-                font-family: 'Segoe UI';
-                font-size: 13px;
-            }
-            QTextEdit {
-                background-color: #f7f7f7;
-                border: 1px solid #dcdcdc;
-                border-radius: 8px;
-                padding: 8px;
-                font-family: 'Segoe UI';
-                font-size: 13px;
-                color: #333333;
-            }
-            QPushButton {
-                background-color: #f3f3f3;
-                color: #202020;
-                border-radius: 6px;
-                border: 1px solid #202020;
-                font-size: 12px;
-                padding: 4px 8px;
-            }
-            QPushButton:hover {
-                background-color: #e8e8e8;
-            }
-        """)
-
         # ----- Title Bar -----
         self.title_row = QHBoxLayout()
         self.title = QLabel("Notes")
@@ -61,6 +26,7 @@ class NotesTile(TileWidget):
 
         # ----- Editor + Preview -----
         self.editor = QTextEdit()
+        self.editor.viewport().setAutoFillBackground(False)
         self.editor.setPlaceholderText("Write in Markdown...")
         self.preview = QLabel()
         self.preview.setWordWrap(True)
@@ -72,6 +38,45 @@ class NotesTile(TileWidget):
         layout.addStretch(1)
 
         self.previewing = False
+
+        # ----- Styles -----
+        self.inner.setStyleSheet("""
+                    background-color: #ffffff;
+                    border-radius: 12px;
+                """)
+        self.inner.setStyleSheet("""
+                    QLabel {
+                        background-color: transparent;
+                        border: none;
+                        color: #202020;
+                        font-family: 'Segoe UI';
+                        font-size: 13px;
+                    }
+                    QTextEdit {
+                        background-color: #E8E9EB;
+                        border-radius: 8px;
+                        padding: 10px 10px;
+                        color: #333;
+                        selection-background-color: rgba(0,0,0,0.1);
+                    }
+                    QTextEdit:focus {
+                        background-color: #D7D8DA;
+                    }
+                    QTextEdit QWidget {
+                        background: transparent;
+                        border-radius: 6px;
+                    }
+                    QPushButton {
+                        background-color: #f3f3f3;
+                        color: #202020;
+                        border-radius: 8px;
+                        font-size: 12px;
+                        padding: 4px 8px;
+                    }
+                    QPushButton:hover {
+                        background-color: #e8e8e8;
+                    }
+                """)
 
     # ----- Toggle between Edit and Preview -----
     def toggle_preview(self):

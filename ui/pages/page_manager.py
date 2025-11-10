@@ -4,3 +4,6 @@ class PageManager:
 
     def __init__(self, board):
         self.board = board
+        self.pages = []
+
+        def open_page():

@@ -2,6 +2,16 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QGraphicsDropShadowEffect
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from core.motion.presets.hover import HoverBehavior
+from ui.tileboard.expand_behavior import ExpandBehavior
+from core.themes.manager import ThemeManager
+
+theme_manager = ThemeManager()
+
+from core.themes.light import THEME_LIGHT
+from core.themes.dark import THEME_DARK
+theme_manager.register("light", THEME_LIGHT)
+theme_manager.register("dark", THEME_DARK)
+
 
 class TileWidget(QWidget):
     """Aurevue Tile Foundry — Faux-Gutter System.
@@ -66,23 +76,47 @@ class TileWidget(QWidget):
         # Shadow (depth)
         # -----------------------------
         self.apply_shadow("#000000", blur=24, x_offset=0, y_offset=6, opacity=0.25)
+        self.expand_fx = ExpandBehavior(self.inner)
         self.hover_fx = HoverBehavior(self.inner)
 
     # -----------------------------
     # Theme / Mood Integration
     # -----------------------------
-    def apply_theme(self, tokens: dict):
-        bg = tokens.get("tile", "#ffffff")
-        text = tokens.get("text", "#000000")
-        border = tokens.get("border", "#d0d0d0")
+    def apply_theme(self, tokens: dict | None = None):
+        """Applies Aurevue theme tokens to this tile."""
+        if tokens is None and self.theme_manager:
+            tokens = self.theme_manager.get()
+        if not tokens:
+            return
+
+        # Resolve groups safely
+        tile = tokens.get("tile", {})
+        text = tokens.get("text", {})
+        base = tokens.get("base", {})
+
+        # Extract colors with fallbacks
+        bg = tile.get("background", "#ffffff")
+        fg = text.get("primary", "#000000")
+        border = tile.get("border", "#d0d0d0")
+        shadow_str = tile.get("shadow", base.get("shadow", "rgba(0,0,0,0.25)"))
+
+        # Convert shadow string (RGBA or hex) to usable QColor
+        shadow_color = QColor()
+        shadow_color.setNamedColor(shadow_str.split()[0]) if shadow_str.startswith("#") else shadow_color.setNamedColor(
+            "#000000")
+
+        # Apply style
         self.inner.setStyleSheet(f"""
             QWidget#inner {{
                 background-color: {bg};
-                color: {text};
+                color: {fg};
                 border: 1px solid {border};
                 border-radius: 12px;
             }}
         """)
+
+        # Update shadow
+        self.apply_shadow(shadow_color.name(), blur=24, y_offset=6, opacity=0.25)
 
     # -----------------------------
     # Depth / Shadow Handling
@@ -110,4 +144,7 @@ class TileWidget(QWidget):
         super().leaveEvent(event)
 
     def mousePressEvent(self, event):
-        event.accept()
+        # if hasattr(self, "expand_fx"):
+            # self.expand_fx.click()
+        # super().mousePressEvent(event)
+        pass
