@@ -16,16 +16,16 @@ class WeatherTile(TileWidget):
 
         # ----- Labels -----
         self.title = QLabel("Weather")
-        self.title.setStyleSheet("font-family:'Segoe UI Semibold'; font-size:14px; color:#202020;")
+        self.title.setStyleSheet("font-family:'Segoe UI Semibold'; font-size:14px;")
 
         self.temp = QLabel("—°")
-        self.temp.setStyleSheet("font-family:'Segoe UI Semibold'; font-size:28px; color:#202020;")
+        self.temp.setStyleSheet("font-family:'Segoe UI Semibold'; font-size:28px;")
 
         self.condition = QLabel("Loading...")
-        self.condition.setStyleSheet("font-family:'Segoe UI'; font-size:14px; color:#202020;")
+        self.condition.setStyleSheet("font-family:'Segoe UI'; font-size:14px;")
 
         self.loc = QLabel("")
-        self.loc.setStyleSheet("font-family:'Segoe UI'; color:#5a5a5a; font-size:12px;")
+        self.loc.setStyleSheet("font-family:'Segoe UI'; font-size:12px;")
 
         layout.addWidget(self.title)
         layout.addWidget(self.temp)

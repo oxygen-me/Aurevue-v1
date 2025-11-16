@@ -1,13 +1,13 @@
-THEME_LIGHT = {
+THEME_QQFTFZ = {
     "shell": {
         "background": "#FDFDFD",  # canvas tone behind tiles (slightly darker than tile)
         "shadow": "rgba(0,0,0,0.05)",
     },
     "board": {
-        "background": "#d0d3d5",  # board background (matches base for continuity)
+        "background": "#2390e4",  # board background (matches base for continuity)
     },
     "tile": {
-        "background": "#FFFFFF",
+        "background": "#91c8f2",
         "border": "transparent",
         "shadow": "rgba(0,0,0,0.16)",
     },
@@ -16,17 +16,17 @@ THEME_LIGHT = {
         "secondary": "#4B4B4B",
     },
     "io": {
-        "background": "#E8E9EB",  # input idle
-        "focus": "#D7D8DA",       # input focused
+        "background": "#83b4da",  # input idle
+        "focus": "#5b9fd4",       # input focused
         "text": "#333333",
     },
     "accent": {
-        "main": "#F4F4F6",        # matches output/button tones
-        "hover": "#E8E9EB",
-        "press": "#D7D8DA",
+        "main": "#65b1ec",        # matches output/button tones
+        "hover": "#5b9fd4",
+        "press": "#477ca5",
         "text": "#202020",
     },
     "output": {
-        "background": "#F4F4F6",  # used for text outputs / display boxes
+        "background": "#83b4da",  # used for text outputs / display boxes
     }
 }

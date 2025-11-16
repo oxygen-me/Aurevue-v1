@@ -1,8 +1,11 @@
 from PySide6.QtWidgets import QWidget, QSizePolicy
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPainter, QPen, QBrush, QColor
+
+from ui.pages.page_manager import PageManager
 from ui.tileboard.metrics import *
 from ui.tileboard.tile_manager import TileManager
+from core.themes import theme_manager
 
 
 class BoardWidget(QWidget):
@@ -13,7 +16,6 @@ class BoardWidget(QWidget):
         self.setMinimumSize(400, 400)
         self.setStyleSheet("""
             #board_area {
-                background-color: #d0d3d5;
                 border-radius: 12px;
             }
         """)
@@ -23,13 +25,16 @@ class BoardWidget(QWidget):
 
         # Core grid configuration
         from ui.tileboard.metrics import GridConfig
-        self.cfg = GridConfig(cols=14, rows=9, margin_x=10, margin_y=10)  # ✅ create a real config
+        self.cfg = GridConfig(cols=GridConfig.cols, rows=GridConfig.rows,
+                              margin_x=GridConfig.margin_x, margin_y=GridConfig.margin_y)  # ✅ create a real config
 
         self.gm = None
         self.manager = None
         self.edit_mode = False
 
-        print("BoardWidget initialized, waiting for resizeEvent to create TileManager.")
+        self.page_manager = PageManager(self)
+
+        print("[Tileboard] BoardWidget initialized, waiting for resizeEvent to create TileManager.")
 
     # -------------------------------------------------
     # Geometry
@@ -44,9 +49,10 @@ class BoardWidget(QWidget):
         self.gm = calc_grid(self.width(), self.height(), self.cfg)
 
         if self.manager is None:
-            print("✅ Creating TileManager after grid init...")
+            print("[Tileboard] Creating TileManager after grid init...")
             from ui.tileboard.tile_manager import TileManager
             self.manager = TileManager(self, self.gm)
+            self.manager.page_manager = self.page_manager
             self.manager.render_default_set()
         else:
             self.manager.metrics = self.gm
@@ -101,3 +107,22 @@ class BoardWidget(QWidget):
             for r in range(1, rows):
                 y = top + r * step_y
                 painter.drawLine(QPointF(left, y), QPointF(right, y))
+
+    def apply_theme(self, tokens: dict | None = None):
+        if not tokens:
+            return
+
+        board = tokens.get("board", {})
+
+        bg = board.get("background", "#d0d3d5")
+
+        self.setProperty("theme-bg", bg)
+
+        self.setStyleSheet(f"""
+        background-color: {bg};
+        }}
+    """)
+
+        self.style().unpolish(self)
+        self.style().polish(self)
+        self.update()

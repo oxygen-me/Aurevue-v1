@@ -23,28 +23,6 @@ class MusicTile(TileWidget):
         root.setSpacing(10)
         root.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        # --- Styles (light mode; moods can override later) ---
-        self.setStyleSheet("""
-            MusicTile {
-                background-color: #ffffff;
-                border-radius: 12px;
-            }
-            QLabel {
-                background: transparent;
-                color: #202020;
-            }
-            QPushButton {
-                background-color: #f4f4f4;
-                border: 1px solid #d8d8d8;
-                border-radius: 8px;
-                padding: 6px 10px;
-                font-size: 12px;
-            }
-            QPushButton:hover {
-                background-color: #ececec;
-            }
-        """)
-
         # --- Top Row: Album Art + Meta ---
         top = QHBoxLayout()
         top.setSpacing(12)
@@ -64,7 +42,6 @@ class MusicTile(TileWidget):
         self.artist = QLabel("—")
         f = QFont("Segoe UI", 10)
         self.artist.setFont(f)
-        self.artist.setStyleSheet("color:#5a5a5a;")
         self.artist.setWordWrap(True)
 
         meta_col.addWidget(self.title)
@@ -96,7 +73,7 @@ class MusicTile(TileWidget):
 
         # --- Progress (placeholder) ---
         self.progress = QLabel("00:00 — 00:00")
-        self.progress.setStyleSheet("color:#7a7a7a; font-size:11px;")
+        self.progress.setStyleSheet("font-size:11px;")
 
         # --- Assemble ---
         root.addLayout(top)

@@ -1,5 +1,6 @@
 from PySide6.QtCore import QObject, Signal
 
+
 class CommandInterpreter(QObject):
 
     sig_output = Signal(str)
@@ -16,6 +17,7 @@ class CommandInterpreter(QObject):
             "help": self._cmd_help,
             "exit": self._cmd_exit,
             "theme": self._cmd_theme,
+            "print": self._print_text,
         }
 
     def process(self, raw_input: str):
@@ -62,12 +64,29 @@ class CommandInterpreter(QObject):
             return "Usage: theme <light|dark>"
 
         theme_name = args[0].lower()
-        if theme_name not in ("light", "dark"):
+        if theme_name not in ("light", "dark", "qqftfz"):
             return "Unknown theme. Try 'light' or 'dark'."
 
         if not self.theme_manager:
             return "Error: No theme manager connected."
 
-        self.theme_manager.apply_to_children(self.root_widget)
-        self.theme_manager.apply(self.root_widget, theme_name)
+        # Apply global theme
+        self.theme_manager.apply_to_children(self.root_widget, theme_name)
+
+        # Apply Specific Styles
+        try:
+            from ui.tiles.presets.command_tile import CommandTile
+            for tile in self.root_widget.findChildren(CommandTile):
+                tile.apply_output_theme(self.theme_manager.get())
+
+        except Exception as e:
+            print(f"[CommandInterpreter] Failed to apply a specialized theme: {e}")
+
         return f"Theme switched to {theme_name.capitalize()}."
+
+    def _print_text(self, args):
+        if not args:
+            return "Usage: print <message>"
+        message = " ".join(args)
+        print(f"[AUREVUE PRINT] {message}")
+        return message

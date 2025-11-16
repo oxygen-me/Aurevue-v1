@@ -1,3 +1,4 @@
+from PySide6.QtCore import QTimer
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QWidget
 
@@ -26,41 +27,60 @@ class ThemeManager:
 
     # Activate and apply a theme to a specific widget
     def apply(self, widget, theme_name: str):
+        """Safely applies a theme to the given widget and updates active state."""
+        # ---- Validate theme ----
         if theme_name not in self.themes:
             raise ValueError(f"Theme '{theme_name}' not found.")
+
+        # Lock active theme *before* painting
         self.active = theme_name
         tokens = self.themes[theme_name]
 
-        # pull common colors
-        bg = self.token("tile", "background") or self.token("base", "background")
-        text = self.token("text", "primary")
-        border = self.token("tile", "border")
-        shadow = self.token("tile", "shadow")
+        # ---- Extract core colors ----
+        bg = self.token("tile", "background") or self.token("base", "background") or "#ffffff"
+        text = self.token("text", "primary") or "#000000"
+        border = self.token("tile", "border") or "#d0d0d0"
+        shadow = self.token("tile", "shadow") or "rgba(0,0,0,0.25)"
 
-        # Apply the theme visually to the root widget
+        # ---- Reset previous styles before applying new ones ----
+        widget.setStyleSheet("")  # clears old paint layers
+
+        # ---- Apply base styling ----
         widget.setStyleSheet(f"""
             QWidget {{
                 background-color: {bg};
                 color: {text};
-                border: 1px solid {border};
+                border: none;  /* prevent over-layering borders */
                 border-radius: 12px;
             }}
         """)
 
+        # ---- Mark current theme ----
         widget.active_theme = tokens
 
-    def apply_to_children(self, root_widget: QWidget):
-        """Apply the active theme recursively to any widget with apply_theme()."""
-        if not self.active:
+        print(f"[ThemeManager] Applied theme '{theme_name}' to {widget.__class__.__name__}")
+
+    def apply_to_children(self, widget, theme_name=None):
+        print(f"[DEBUG] Applying theme '{theme_name}' starting from {widget.__class__.__name__}")
+        if not widget:
             return
-        theme = self.get()
-        for child in root_widget.findChildren(QWidget):
+
+        if theme_name:
+            if theme_name not in self.themes:
+                raise ValueError(f"Theme '{theme_name}' not found.")
+            self.active = theme_name  # <-- lock state *before* painting
+            tokens = self.themes[theme_name]
+        else:
+            tokens = self.themes.get(self.active, {})
+
+        # apply theme to the widget itself
+        self.apply(widget, theme_name or self.active)
+
+        # recursively apply to all children
+        for child in widget.findChildren(QWidget):
             if hasattr(child, "apply_theme"):
-                print("[ThemeManager] Applying theme to:", child.objectName(), child.__class__.__name__)
-                try:
-                    child.apply_theme(theme)
-                    child.style().unpolish(child)
-                    child.style().polish(child)
-                    child.update()
-                except Exception as e:
-                    print(f"[ThemeManager] Failed to theme {child}: {e}")
+                child.apply_theme(tokens)
+                widget.style().unpolish(widget)
+                widget.style().polish(widget)
+                widget.update()
+        widget.update()

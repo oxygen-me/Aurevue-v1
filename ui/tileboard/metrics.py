@@ -11,6 +11,7 @@ from typing import Tuple, Generator
 # ----------------------------------------------------------------
 USER_COLS = 14
 USER_ROWS = 9
+USER_BUFFER = 10
 
 # ================================================================
 # DATA CLASSES
@@ -20,9 +21,8 @@ USER_ROWS = 9
 class GridConfig:
     cols: int = USER_COLS
     rows: int = USER_ROWS
-    spacer_x: int = 10   # 10px gutter between tiles (horizontal)
-    spacer_y: int = 10   # 10px gutter between tiles (vertical)
-    margin_x: int = 10   # 10px margin on left/right
+    t_buffer: int = USER_BUFFER
+    margin_x: int = 10  # 10px margin on left/right
     margin_y: int = 10   # 10px margin on top/bottom
 
 
@@ -37,8 +37,7 @@ class GridMetrics:
     tile_w: int
     tile_h: int
 
-    spacer_x: int
-    spacer_y: int
+    t_buffer: int
 
     margin_x: int
     margin_y: int
@@ -79,8 +78,7 @@ def calc_grid(win_w: int, win_h: int, cfg: GridConfig) -> GridMetrics:
         rows=cfg.rows,
         margin_x=cfg.margin_x,
         margin_y=cfg.margin_y,
-        spacer_x=cfg.spacer_x,
-        spacer_y=cfg.spacer_y,
+        t_buffer=cfg.t_buffer,
         tile_w=tile_w,
         tile_h=tile_h,
         inner_w=inner_w,
@@ -98,10 +96,10 @@ def cell_rect(col: int, row: int, span_x: int, span_y: int, gm: GridMetrics) -> 
     span_x = max(1, min(span_x, gm.cols - col))
     span_y = max(1, min(span_y, gm.rows - row))
 
-    x = gm.margin_x + col * (gm.tile_w + gm.spacer_x)
-    y = gm.margin_y + row * (gm.tile_h + gm.spacer_y)
-    w = gm.tile_w * span_x + gm.spacer_x * (span_x - 1)
-    h = gm.tile_h * span_y + gm.spacer_y * (span_y - 1)
+    x = gm.margin_x + col * (gm.tile_w + gm.t_buffer)
+    y = gm.margin_y + row * (gm.tile_h + gm.t_buffer)
+    w = gm.tile_w * span_x + gm.t_buffer * (span_x - 1)
+    h = gm.tile_h * span_y + gm.t_buffer * (span_y - 1)
     return x, y, w, h
 
 
@@ -115,12 +113,12 @@ def grid_lines(gm: GridMetrics) -> Generator[Tuple[int, int, int, int], None, No
 
     # verticals
     for c in range(1, gm.cols):
-        x = gm.margin_x + c * (gm.tile_w + gm.spacer_x)
+        x = gm.margin_x + c * (gm.tile_w + gm.t_buffer)
         yield (x, gm.margin_y, x, gm.margin_y + gm.inner_h)
 
     # horizontals
     for r in range(1, gm.rows):
-        y = gm.margin_y + r * (gm.tile_h + gm.spacer_y)
+        y = gm.margin_y + r * (gm.tile_h + gm.t_buffer)
         yield (gm.margin_x, y, gm.margin_x + gm.inner_w, y)
 
 class TileMetrics:

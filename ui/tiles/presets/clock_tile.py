@@ -14,19 +14,6 @@ class ClockTile(TileWidget):
         layout.setSpacing(8)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
-        # ----- Style -----
-        self.setStyleSheet("""
-                    ClockTile {
-                        background-color: #ffffff;
-                        border-radius: 12px;
-                    }
-                    QLabel {
-                        background: transparent;
-                        border: none;
-                        color: #202020;
-                    }
-                """)
-
         # ----- Content -----
         self.title = QLabel("Clock")
         self.title.setStyleSheet("font-family:'Segoe UI Semibold'; font-size:14px;")

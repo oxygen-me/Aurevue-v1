@@ -3,9 +3,8 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from core.motion.presets.hover import HoverBehavior
 from ui.tileboard.expand_behavior import ExpandBehavior
-from core.themes.manager import ThemeManager
-
-theme_manager = ThemeManager()
+from core.themes import theme_manager
+from ui.tileboard.metrics import GridConfig
 
 from core.themes.light import THEME_LIGHT
 from core.themes.dark import THEME_DARK
@@ -19,7 +18,7 @@ class TileWidget(QWidget):
     The inner (visible) frame is inset 10px on each edge
     to create optical gutters without breaking grid math.
     """
-    BUFFER = 10  # px inward offset per edge
+    BUFFER = GridConfig.t_buffer
 
     def __init__(self, parent=None, tile_id=None, tile_type="generic",
                  grid_x=0, grid_y=0, grid_w=1, grid_h=1, metrics=None):
@@ -83,40 +82,90 @@ class TileWidget(QWidget):
     # Theme / Mood Integration
     # -----------------------------
     def apply_theme(self, tokens: dict | None = None):
-        """Applies Aurevue theme tokens to this tile."""
+        """Applies Aurevue theme tokens to this tile and all shared UI elements."""
         if tokens is None and self.theme_manager:
             tokens = self.theme_manager.get()
         if not tokens:
             return
 
-        # Resolve groups safely
+        # --- Extract grouped tokens safely ---
         tile = tokens.get("tile", {})
         text = tokens.get("text", {})
+        io = tokens.get("io", {})
+        accent = tokens.get("accent", {})
         base = tokens.get("base", {})
 
-        # Extract colors with fallbacks
+        # --- Core colors with fallbacks ---
         bg = tile.get("background", "#ffffff")
         fg = text.get("primary", "#000000")
         border = tile.get("border", "#d0d0d0")
         shadow_str = tile.get("shadow", base.get("shadow", "rgba(0,0,0,0.25)"))
 
-        # Convert shadow string (RGBA or hex) to usable QColor
-        shadow_color = QColor()
-        shadow_color.setNamedColor(shadow_str.split()[0]) if shadow_str.startswith("#") else shadow_color.setNamedColor(
-            "#000000")
+        io_bg = io.get("background", "#f0f0f0")
+        io_fg = io.get("text", "#202020")
+        io_focus = io.get("focus", "#e0e0e0")
 
-        # Apply style
+        accent_main = accent.get("main", "#0078ff")
+        accent_hover = accent.get("hover", "#3399ff")
+        accent_press = accent.get("press", "#005fcc")
+        accent_text = accent.get("text", "#ffffff")
+
+        # --- Unified Tile Stylesheet ---
         self.inner.setStyleSheet(f"""
             QWidget#inner {{
                 background-color: {bg};
                 color: {fg};
-                border: 1px solid {border};
+                border: none;                 /* removes hard gray lines */
                 border-radius: 12px;
+            }}
+
+            QLabel {{
+                background: transparent;
+                color: {fg};
+                font-family: 'Segoe UI';
+            }}
+
+            QLineEdit, QTextEdit {{
+            background-color: {io_bg};
+            color: {io_fg};
+            border: none;
+            border-radius: 6px;
+            padding: 8px 10px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.10),
+                inset 0 0 0 1px rgba(0,0,0,0.04);
+            }}
+            QLineEdit:focus, QTextEdit:focus {{
+            background-color: {io_focus};
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.12),
+            inset 0 0 0 1px rgba(0,0,0,0.06);
+            }}
+
+            QPushButton {{
+            background-color: {accent_main};
+            color: {accent_text};
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08),
+            inset 0 0 0 1px rgba(255,255,255,0.6);
+            }}
+            QPushButton:hover {{
+            background-color: {accent_hover};
+            box-shadow: 0 1px 2px rgba(0,0,0,0.10),
+            inset 0 0 0 1px rgba(255,255,255,0.8);
+            }}
+            QPushButton:pressed {{
+          background-color: {accent_press};
+           box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
             }}
         """)
 
-        # Update shadow
-        self.apply_shadow(shadow_color.name(), blur=24, y_offset=6, opacity=0.25)
+        # --- Shadow Reapplication (for depth) ---
+        shadow_color = QColor("#000000")
+        shadow_color.setAlphaF(0.25)
+        self.apply_shadow(color=shadow_color.name(), blur=24, y_offset=6, opacity=0.25)
+
+        print("[DEBUG TILE] Using IO_BG:", io_bg, "Accent Main:", accent_main)
 
     # -----------------------------
     # Depth / Shadow Handling
