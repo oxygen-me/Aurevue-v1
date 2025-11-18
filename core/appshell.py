@@ -1,12 +1,14 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QApplication, QLayout
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt, QTimer, Signal
 
-from ui.tileboard.tile_manager import TileManager
+from ui.pages.page_layer import PageLayer
+from ui.pages.page_manager import PageManager
 from ui.tileboard.tileboard import BoardWidget
 
 class AppShell(QWidget):
-    def __init__(self, theme_manager=None):
+    def __init__(self, theme_manager=None, reference=None):
         super().__init__()
+        self.reference = reference
         self.theme_manager = theme_manager
         # -------------------------
         # INITIAL WINDOW CREATION
@@ -39,10 +41,11 @@ class AppShell(QWidget):
         self.board = BoardWidget()  # lives inside the layout, not manually positioned
         self.board.setObjectName("board")
 
+        self.page_layer = PageLayer(self.board)
 
-        # -------------------------
-        # TOPBAR AND SIDEBAR
-        # -------------------------
+        self.page_manager = PageManager(self.page_layer)
+
+        QTimer.singleShot(0,lambda: self.page_layer.setGeometry(self.board.rect()))
 
         # -------------------------
         # LAYOUTS GALORE

@@ -183,6 +183,7 @@ class TileWidget(QWidget):
     # Event Hooks (Phase 2)
     # -----------------------------
     def enterEvent(self, event):
+        self.raise_()
         if hasattr(self, "hover_fx"):
             self.hover_fx.enter()
         super().enterEvent(event)

@@ -45,7 +45,7 @@ class TileManager:
         self.clear_tiles()
 
         topbar = TopBar(self.board, metrics=self.metrics, grid_x=0, grid_y=0, grid_w=14, grid_h=1)
-        sidebar = SideBar(self.board, page_manager=self.page_manager, metrics=self.metrics, grid_x=0, grid_y=1, grid_w=3, grid_h=8)
+        sidebar = SideBar(self.board, metrics=self.metrics, grid_x=0, grid_y=1, grid_w=3, grid_h=8)
 
         notes = NotesTile(self.board, metrics=self.metrics, grid_x=7, grid_y=3, grid_w=3, grid_h=4)
         weather = WeatherTile(self.board, metrics=self.metrics, grid_x=6, grid_y=1, grid_w=4, grid_h=2)

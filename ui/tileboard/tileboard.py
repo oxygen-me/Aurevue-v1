@@ -2,7 +2,6 @@ from PySide6.QtWidgets import QWidget, QSizePolicy
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPainter, QPen, QBrush, QColor
 
-from ui.pages.page_manager import PageManager
 from ui.tileboard.metrics import *
 from ui.tileboard.tile_manager import TileManager
 from core.themes import theme_manager
@@ -32,8 +31,6 @@ class BoardWidget(QWidget):
         self.manager = None
         self.edit_mode = False
 
-        self.page_manager = PageManager(self)
-
         print("[Tileboard] BoardWidget initialized, waiting for resizeEvent to create TileManager.")
 
     # -------------------------------------------------
@@ -52,7 +49,6 @@ class BoardWidget(QWidget):
             print("[Tileboard] Creating TileManager after grid init...")
             from ui.tileboard.tile_manager import TileManager
             self.manager = TileManager(self, self.gm)
-            self.manager.page_manager = self.page_manager
             self.manager.render_default_set()
         else:
             self.manager.metrics = self.gm

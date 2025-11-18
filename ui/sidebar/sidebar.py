@@ -3,11 +3,11 @@ from ui.tileboard.tile import TileWidget  # adjust path as needed
 from PySide6.QtWidgets import QLabel, QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QSizePolicy
 from PySide6.QtCore import Qt
 from core.themes import theme_manager
+from eventbus import bus
 
 class SideBar(TileWidget):
-    def __init__(self, parent=None, page_manager=None, **kwargs):
+    def __init__(self, parent=None, **kwargs):
 
-        self.page_manager = page_manager
 
         super().__init__(parent, tile_id="sidebar", tile_type="sidebar", **kwargs)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
@@ -72,5 +72,5 @@ class SideBar(TileWidget):
         return f"Theme switched to {theme_name.capitalize()}."
 
     def on_settings(self):
-        self.page_manager.render_page(1)
+        bus.configRequested.emit(1)
 

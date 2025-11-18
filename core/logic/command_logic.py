@@ -1,4 +1,5 @@
 from PySide6.QtCore import QObject, Signal
+from eventbus import bus
 
 
 class CommandInterpreter(QObject):
@@ -56,7 +57,7 @@ class CommandInterpreter(QObject):
 
     def _cmd_exit(self, args):
         self.sig_output.emit("Shutting down Aurevue...")
-        self.sig_exit_requested.emit()
+        bus.quitRequested.emit()
         return "Exiting..."
 
     def _cmd_theme(self, args):

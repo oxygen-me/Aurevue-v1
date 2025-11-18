@@ -1,20 +1,16 @@
 from ui.pages.registry import get_page_class
+from PySide6.QtCore import Qt
+from eventbus import bus
 
 class PageManager:
-    """This controls the creation and deletion of pages."""
+    def __init__(self, layer):
+        self.layer = layer
+        self.current = None
+        bus.configRequested.connect(self.render_page)
 
-    def __init__(self, board):
-        self.board = board
-        self.pages = []
-        print("[PageManager] init pages complete.")
-
-    # --------------------------
-    # Public API
-    # --------------------------
     def fabric_page(self, page_cls, **kwargs):
-        page = page_cls(self.board, **kwargs)
-        page.show()
-        self.pages.append(page)
+        page = page_cls(self.layer, **kwargs)
+        page.setGeometry(self.layer.rect())
         return page
 
     def render_page(self, page_id):
@@ -23,5 +19,15 @@ class PageManager:
             print(f"[PageManager] No page for id {page_id}")
             return
 
-        return self.fabric_page(page_cls)
+        if self.current:
+            self.current.setParent(None)
+            self.current.deleteLater()
 
+        page = self.fabric_page(page_cls)
+
+        self.current = page
+        page.show()
+        page.apply_theme()
+
+        self.layer.show()
+        self.layer.raise_()
